@@ -22,3 +22,19 @@ Una vez que el contrato es inicializado de manera exitosa, se pasa a agregar fon
 Para comprobar que se realizo de manera correcta lo ejecutamos como se ve a continuacion:
 
 ![](img/truffle20.png)
+
+PASO 3
+
+Aqui se implementa la herencia y se agrega la info para 3 acciones mas en el contrato las cuales consisten en 
+el fundeo exitoso, el fondeo fallido y evitar contribucion fuera del tiempo, para ello dentro de nuestro archivo "crowdfundingwithdeadline.sol" añadimos las funciones y la instancia necesaria para evitar la contribufion fuera de tiempo limite.
+
+![](img/truffle31.png)![](img/truffle32.png)![](img/truffle33.png)
+
+Una vez que tenemos las funciones, añadimos a nuestro .js el it correspondiente a cada una de estas nuevas funciones y una constante que necesitaremos
+
+![](img/truffle34.png)![](img/truffle35.png)
+
+Aqui comprobamos ejecutando nuestro truffle para verificar que tenemos nuestros 5 passing funcionando correctamente como se ve a continuacion:
+
+![](img/truffle30.png)
+

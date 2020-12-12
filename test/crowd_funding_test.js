@@ -1,4 +1,4 @@
-let CrowdFundingWithDeadline = artifacts.require('./CrowdFundingWithDeadline')
+let CrowdFundingWithDeadline = artifacts.require('./TestCrowdFundingWithDeadline')
 
 contract('CrowdFundingWithDeadline', function(accounts) {
 
@@ -7,6 +7,7 @@ contract('CrowdFundingWithDeadline', function(accounts) {
     let beneficiary = accounts[1];
 
     const ONE_ETH = 1000000000000000000;
+    const ERROR_MSG = 'Returned error: VM Exception while processing transaction: revert';
 
     const ONGOING_STATE = '0';
     const FAILED_STATE = '1';
@@ -30,6 +31,9 @@ contract('CrowdFundingWithDeadline', function(accounts) {
         let targetAmount = await contract.targetAmount.call()
         expect(targetAmount.toString()).to.equal(ONE_ETH.toString());
 
+        let fundingDeadline = await contract.fundingDeadline.call()
+        expect(fundingDeadline.toString()).to.equal('600');
+
         let actualBeneficiary = await contract.beneficiary.call()
         expect(actualBeneficiary).eql(beneficiary);
 
@@ -49,6 +53,39 @@ contract('CrowdFundingWithDeadline', function(accounts) {
         let totalCollected = await contract.totalCollected.call();
         expect(totalCollected.toString()).to.equal(ONE_ETH.toString());
 
-    })
+    });
+
+    it('cannot contribute after deadline', async function() {
+        try {
+            await contract.setCurrentTime(601);
+            await contract.sendTransaction({
+                value: ONE_ETH,
+                from: contractCreator
+            });
+            expect.fail();
+        } catch (error) {
+            expect(error.message.toString()).to.equal(ERROR_MSG);
+        }
+    });
+
+    it('crowdfunding succeeded', async function() {
+        await contract.contribute({
+            value: ONE_ETH,
+            form: contractCreator
+        });
+        await contract.setCurrentTime(601);
+        await contract.finishCrowdFunding();
+        let state = await contract.state.call();
+
+        expect(state.valueOf().toString()).to.equal(SUCCEEDED_STATE);
+    });
+
+    it('crowdfunding failed', async function() {
+        await contract.setCurrentTime(601);
+        await contract.finishCrowdFunding();
+        let state = await contract.state.call();
+
+        expect(state.valueOf().toString()).to.equal(FAILED_STATE);
+    });
 
 });
