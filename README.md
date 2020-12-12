@@ -38,3 +38,14 @@ Aqui comprobamos ejecutando nuestro truffle para verificar que tenemos nuestros 
 
 ![](img/truffle30.png)
 
+PASO 3 Complemento
+
+Se agregan 2 metodos y sus 2 funciones correspondientes
+
+![](img/truffle36.png)![](img/truffle37.png)
+
+NOTA: aqui para que funcione correctamente todas las declaraciones de las variables beneficiary y beneficiaryAddress se tienen que pasar de tipo "address" a tipo "addres payable".
+
+Ahora verificamos que funcione correctamente al ejecutarlo
+
+![](img/truffle38.png)
